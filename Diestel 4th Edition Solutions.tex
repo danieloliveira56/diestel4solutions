@@ -1,0 +1,646 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{algorithm2e}
+\theoremstyle{plain}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{proposition}{Proposition}
+
+%2
+\newtheorem*{konig}{Konig's Matching Theorem}
+\newtheorem*{hall}{Hall's Marriage Theorem}
+\newtheorem*{tutteberge}{Tutte-Berge Formula}
+\newtheorem*{tutte}{Tutte's Matching Theorem}
+%3
+\newtheorem*{menger}{Menger's Theorem}
+%4
+\newtheorem*{kuratowski}{Kuratowski's Theorem}
+
+%5
+\newtheorem*{brook}{Brook's Theorem}
+\newtheorem*{vizing}{Vizing's Theorem}
+%6
+\newtheorem*{seymour}{Seymour's 6-flow Theorem}
+%7
+\newtheorem*{turan}{Turan's Theorem}
+%9
+\newtheorem*{ramsey}{Ramsey's Theorem}
+%10
+\newtheorem*{dirac}{Dirac's Theorem}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\usepackage{float}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zplus}{\mathbb{Z}_+}
+
+
+\begin{document}
+
+\title{Diestel's Graph Theory 4th Edition Solutions}
+\author{Daniel Oliveira}
+\maketitle
+
+\section{Frequently used relations and techniques}
+
+\begin{itemize}
+
+\item Let $X$ be a maximal path, cycle, clique, co-clique, subgraph with something, and show you can increase it to get a contradiction.
+\item Let $X$ be a minimal with or without something and remove an element to get a graph with or without the something.
+\item Assume $G$ is connected.
+\item Let $x_1,\ldots,v_k$ be an ordering of $X\subseteq V$.
+
+\item $\sum d(v) = 2|E|$.
+\item Handshake lemma, if each $A$ sees $b$ of $B$ and each $B$ sees $a$ of $A$, $|A|b = |B|a$ (We count the number of handshakes in two ways).
+\item $G$ has a path of length $\delta(G)$, and a cycle of length $\delta(G)+1$.
+\item Bipartite iff no odd cycle.
+\item Eulerian if even degree on all vertices. Eulerian $G$ has $E(G) \subseteq \mathcal{C}$
+
+\item Set of disjoint matchings = Colouring of $|E|$
+
+\item 2-connected iff cycle + $H$-paths
+
+\item $\chi(G)\alpha(g) \geq |G|$
+\item Kempe switching.
+
+
+\item $\delta(G) \geq n/2$ then Hamiltonian.
+
+
+\end{itemize}
+
+\section{Chapter 1 - The basics}
+
+\textbf{1.23)} Let $\mathcal{F}$ be a set of subtrees of a tree $T$, and $k \in \mathbb{N}$.
+
+\begin{enumerate}[(i)]
+\item Show that if the trees in $\mathcal{F}$ have pairwise non-empty intersection then their overall intersection $\bigcap \mathcal{F}$ is non-empty.
+\item Show that either $\mathcal{T}$ contains $k$ disjoint trees or there is a set of at most $k-1$ vertices of $T$ meeting every tree in $\mathcal{T}$.
+\end{enumerate}
+
+\noindent \textbf{Solution (i)}
+\begin{proof}
+We prove by induction on $|T|$. For $|T|=1$, (i) is clearly true.
+
+Now let $T$ be a tree of order greater than 1, $\mathcal{F}$ be a collection of subtrees of $T$ with pairwise non-empty intersection, and assume (i) is true for all smaller trees. If any trivial tree $T' = \{v\}$ is in $\mathcal{F}$, then clearly $v \in \bigcap \mathcal{F}$ and $\mathcal{F}$ is non-empty. So assume all subtrees in $\mathcal{F}$ have order at least 2, and consider a leaf vertex $l$ of $T$. By the induction hypothesis, by removing $l$ from $T$ and each subtree of $\mathcal{F}$, we have that the overall intersection of the resulting collection $\mathcal{F'}$ is non-empty. As any pair of subtrees in $\mathcal{F}$ that intersect on $l$ also intersect on the single vertex adjacent to $l$ in $T$, say $l'$, then such pair also intersect in $\mathcal{F'}$, therefore $\bigcap \mathcal{F'} \subseteq \bigcap \mathcal{F}$, and $\bigcap \mathcal{F}$ is non-empty.
+\end{proof}
+
+
+\noindent \textbf{Solution (ii)}
+
+\begin{proof}
+Consider the set $F$ of all edges $e \in T$ such that both components of $T-e$ contains a tree in $\mathcal{T}$, we prove the following:
+
+\begin{lemma}
+The set $F$ forms a subtree of $T$. 
+\end{lemma}
+
+\begin{proof}
+Suppose $F$ forms a forest and let $T_1$ and $T_2$ be two of its components. As $T$ is a tree, there is a unique path $P$ from $T_1$ to $T_2$ over the edges of $T$. So let $v_1 \in V(T_1)$ and $v_2 \in V(T_2)$ be respectively the first and last vertex in $P$, $e_1, e_2$ be respectively the edges of $T_1$ and $T_2$ incident to $v_1$ and $v_2$, and $f$ be an edge of $P$. Then we have components $C_1,C'_1$ in $T-e_1$, $C_2,C'_2$ in $T-e_2$, all containing some subtree in $\mathcal{T}$ by the definition of $F$, and components $C_f, C'_f$ in $T-f$. But then, w.l.o.g., we have $C_f \supseteq C_1$ and $C'_f \supseteq C'_2$, thus both $C_f$ and $C'_f$ contain some subtree in $\mathcal{T}$, contradicting $f \not \in F$.
+\end{proof}
+
+We now prove (ii) by induction on $|\mathcal{F}|$, the case $|\mathcal{F}| = 1$ being trivial. 
+So let $\mathcal{F}$, with $|\mathcal{F}| > 1$, be a collection of subtrees of $T$, and let $T'$ be the subtree of $T$ formed by $F$ as above. 
+
+So consider one of the leaves $v$ of $T'$, let $uv \in F$ be the edge of $T'$ incident to $v$, and $C_v$ be the component of $T-uv$ containing $v$.
+As $F$ is maximal, all subtrees of $\mathcal{F}$ contained in $C_v$ are rooted at $v$, so let $\mathcal{F}_v$ be the set of subtrees in $C_v$.
+
+Now consider the collection $\mathcal{F}'$ of subtrees of $T$ that we get by deleting from $\mathcal{F}$ all subtrees containing $v$. 
+By the induction hypothesis, we either have $k-1$ disjoint trees in $\mathcal{F}'$ or at most $k-2$ vertices meeting all trees in $\mathcal{F}'$.
+If we have $k-1$ disjoint trees in $\mathcal{F}'$, we can take any subtree in $\mathcal{F}_v$ as the $k$-th disjoint subtree in $\mathcal{F}$, and if we have at most $k-2$ vertices meeting all trees in $\mathcal{F}'$, we can include $v$ and have at most $k-1$ vertices covering all subtrees in $\mathcal{F}$.
+\end{proof}
+
+\textbf{1.37)} Let $G$ be a connected graph, we define $\mathcal{F}_1$ as the minimal edge sets containing an edge from every spanning tree, and set $\mathcal{F}_2$ as the set of bonds of $G$.
+
+\vspace{.4cm}
+\noindent \textbf{Solution}
+\begin{proof}
+Let $F$ be a minimal set of edges containing an edge from every spanning tree of $G$. So $F$ contains a cut, otherwise $G-F$ is connected and contains some spanning tree of $G$ with edges disjoint from $F$. As any cut has edges from all spanning trees of $G$, $F$ has exactly one cut, say $F = E(A,B)$. And if some side of the cut were disconnected, say $A' \subset A$, as $G$ is connected, we would have $E(A',B) \neq \emptyset$, so $E(A \setminus A', B \cup A')$ would be strictly contained in $F$, therefore a cut with fewer edges, a contradiction. So both sides of $F$ are connected, thus by exercise 31, $F$ is a bond.
+
+
+Now let $F$ be a bond of $G$. Any spanning tree of $G$ has at least one edge from any cut, otherwise it is disconnected, so $F$ contains edges from all spanning trees of $G$. Then we need to show no edge can be removed from $F$. From exercise 31, we know that both sides of $F=E(V_1,V_2)$ are connected in $G$. So $G[V_1]$ has some spanning tree $T_1$ and $G[V_2]$ has some spanning tree $T_2$ and $T_1$ joined to $T_2$ using any of the edges in $F$ form a distinct spanning tree of $G$. Therefore $F$ is a minimal set of edges containing an edge from every spanning tree of $G$.
+\end{proof}
+
+\textbf{1.38)} Let $F$ be a set of edges in a graph $G$. 
+
+\begin{enumerate}[(i)]
+\item Show that $F$ extends to an element of $\mathcal{C}^*(G)$ if and only if it contains no odd cycle.
+\item Show that $F$ extends to an element of $\mathcal{C}$ if and only if it contains no odd cut.
+
+\end{enumerate}
+\noindent \textbf{Solution (i)}
+
+\begin{proof}
+Let $F$ be a set of edges in $G$ containing an odd cycle. As any set of edges in $\mathcal{C}^*$ forms a bipartite graph with the sides of the cuts as the partitions, and a graph is bipartite if and only if it contains no odd cycle, $F$ cannot be extended to a set of edges of a bipartite subgraph and consequently cannot be extended to an element of $\mathcal{C}^*$.
+
+Now let $F$ be a set of edges with no odd cycle, so it forms a bipartite subgraph of $G$. So it is possible to partition $V$ into sets $A,B$ such that $F \subseteq E(A,B)$, therefore we can extend $F$ to the cut $\delta(A) = \delta(B) = E(A,B)$.
+\end{proof}
+
+\noindent \textbf{Solution (ii)}
+
+\begin{proof}
+Let $F$ be a set of edges in $G$ containing an odd cut, say $X \in \mathcal{C}^*$. Then no matter how many edges we add to $F$, we will always have an odd intersection with $X$, therefore it cannot be extended to an element of $\mathcal{C}$, as $\mathcal{C}^\perp = \mathcal{C}^*$, that is, any element of $\mathcal{C}$ has an even intersection with any element of $\mathcal{C}^*$.
+
+Now let $F$ be a set of edges, we show that if $F \not \in \mathcal{C}$ and contains no odd cut, we can include a new edge in $F$ without increasing the number of odd degree vertices and without creating an odd cut. As we have a finite number of vertices and by including all edges of $G$ in $F$ we either have all vertices with even degree or some odd cut, we can extend $F$ to a element of $\mathcal{C}$.
+
+So let $F \not \in \mathcal{C}$ be a set of edges of $G$ containing no odd cut. As $F \not \in \mathcal{C}$, some vertex $v$ has $d_F(v)$ odd, if all edges incident to $v$ are in $F$, then $F$ contains the odd cut $\delta(v)$, so assume some edge incident to $v$ can still be included in $F$. Let $N_{\bar{F}}(v)$ denote the set of neighbours $u$ of $v$ with $uv \not \in F$.
+
+If some $u$ in $N_{\bar{F}}(v)$ has with $d_F(u)$ odd, we can include $uv$ in $F$ and both $u$ and $v$ will have even degree in $(V,F \cup uv)$, and if we have some odd cut $X$ in $F \cup uv$, necessarly $uv \in X$, say $X = E[A,B]$ with $v \in A$ and $u \in B$.
+\end{proof}
+
+\newpage
+\section*{Chapter 2 - Matching, Covering and Packing}
+
+\textbf{2.11\textsuperscript{+})} Let $G$ be a bipartite graph with bipartition $\{A,B\}$. Assume that $\delta(G) \geq 1$, and that $d(a) \geq d(b)$ for every edge $ab$ with $a \in A$. Show that $G$ contains a matching of $A$.
+
+\begin{proof}
+Suppose there is no matching of $A$, and let $M$ be a maximum matching, $A' \subseteq A$, $B' \subset B$ be the sets of $M$-covered vertices. Clearly $|A'| = |B'|$, and $E(A \setminus A',B \setminus B') = \emptyset$, otherwise $M$ is not maximal.
+
+So by counting the edges incident to $B'$,
+\begin{align*}
+\sum \limits_{v \in B'} d(v) & = \sum \limits_{v \in A'} d(v) + \sum \limits_{v \in A\setminus A'} d(v) \\
+& \geq \sum \limits_{v \in A'}d(v)  + |A' \setminus A| \qquad (\text{as } \delta(G) \geq 1)\\
+& > \sum \limits_{v \in A'} d(v)  \qquad (\text{as } A' \setminus A \neq \emptyset) 
+\end{align*}
+
+And by the given property, each edge $ab \in M$ has $d(a) \geq d(b)$, as $M$ is a matching, 
+\begin{align*}
+\sum \limits_{v \in A'} d(v) \geq \sum \limits_{v \in B'} d(v) ,
+\end{align*}
+a contradiction.
+
+\end{proof}
+
+
+
+\section{Chapter 4 - Planarity}
+
+\textbf{4.22)} A graph is called outerplanar if it has a drawing in which every vertex lies on the boundary of the outer face. Show that a graph is outerplanar if and only if it contains neither $K^4$ nor $K_{2,3}$ as a minor.
+
+\textbf{Solution}
+
+\begin{proof}
+Let $G$ be an outerplanar graph, so we can add a vertex to its outer face and connect it to $V(G)$ without crossing edges, call the resulting graph $G'$. As $G'$ is planar, by Kuratowski's theorem, it has neither $K^5$ nor $K_{3,3}$ as a minor. So $G$ has neither $K^4$ nor $K_{2,3}$ as a minor, as these would yield a $K^5$ or $K_{3,3}$ as a minor with the extra vertex and edges of $G'$.
+
+Now for the converse, let $G$ be graph with no $K_4$ nor $K_{2,3}$ as a minor. By adding a single vertex and connecting it to all vertices of $G$, we have a graph $G'$ which does not have $K^5$ nor $K_{3,3}$ as a minor, therefore is planar by Kuratowski's theorem. So all vertices of $G$ lied on its outer face, otherwise by the Jordan Curve theorem, we would have some edge crossing. 
+\end{proof}
+
+
+\section{Chapter 5 - Colouring}
+
+\textbf{5.1)} Show that the four colour theorem does indeed solve the map colouring problema stated in the first sentence of the chapter. Conversely, does the 4-colourability of every map imply the four colour theorem?
+
+\vspace{.4cm}
+\noindent \textbf{Solution}: If we place one vertex at the center of each country, we are able to draw arcs between the vertices of every pair of countries that have a border in common. So a colouring of the graph translates to a colouring of the map.
+
+Yes, since every planar graph can be formed from a map.
+
+\vspace{.4cm}
+\textbf{5.2)} Show that,for the map colouring above, it suffices to consider maps such that no point lies on the boundary of more than three countries. How does this affect the proof of the four colour theorem?
+
+\vspace{.4cm}
+\noindent \textbf{Solution}: If we have a map with a point lying on the border of $k$ countries, we have that region of the map represented as a $C_k$ in the corresponding plane graph. It is not hard to see that the more edges we have in a graph, the more colours we might need, so that region of the map is not easier to colour than a triangulation of the $k$ vertices, which will translate to a map with no point lying on the boundary of more than 3 vertices.
+
+\vspace{.4cm}
+\textbf{5.3)} Try to turn the proof of the five colour theorem into one of the four colour theorem, as follows. Defining $v$ and $H$ as before, assume inductively that $H$ has a 4-colouring; then proceed as before. Where does the proof fail?
+
+\vspace{.4cm}
+\noindent \textbf{Solution}
+
+\vspace{.4cm}
+\textbf{5.4)} Calculate the chromatic number of a graph in terms of the chromatic numbers of its blocks.
+
+\vspace{.4cm}
+\noindent \textbf{Solution}
+
+\begin{proof}
+Let $G$ be a graph, assume $G$ is connected, as otherwise $\chi(G)$ is clearly the  higher of the chromatic number among its components. Let $\mathcal{B}$ be the collection of blocs of $G$. Consider the block graph of $G$, it is a tree. We colour each block of $G$ independently of each other. Starting from any block $B$, we fix its colouring in $G$ and look to any adjacent block $B'$, by the maximality of each block, $B$ and $B'$ are joined by a single edge, say $uv$ with $u \in B$ and $v \in B'$, if the colour of $u$ and $v$ are the same, we switch the colours of $B'$, and fix its colouring. This way, as no cycle exists in the block graph, we never have to match the colours of more than a single pair of vertices at a time. So we can match the colouring of each pair of blocks in this way until $G$ is properly coloured. So we don't need to use any new colour to colour $G$ and $\chi(G) = \max_B\in\mathcal{B}\{\chi(B)\}$.
+\end{proof}
+
+\textbf{5.5)} Show that every graph $G$ has a vertex ordering for which the greedy algorithm uses only $\chi(G)$ colours.
+
+\vspace{.4cm}
+\noindent \textbf{Solution}
+
+\begin{proof}
+Let $f:V \rightarrow \{1,\ldots,k\}$ be an optimal colouring of $G$, thus $k = \chi(G)$, and order the colours such that by taking maximal sets of vertices $V_1,\ldots,V_k$ for each colour, we have $|V_1| \geq |V_2| \geq \ldots\geq |V_k|$. Colouring the vertices greedly following such ordering, clearly yields an optimal colouring.
+\end{proof}
+
+\textbf{5.6)} For every $n>1$, find a bipartite graph on $2n$ vertices, ordered in such a way that the greedy algorithm uses $n$ rather that 2 colours.
+
+\vspace{.4cm}
+\noindent \textbf{Solution} 
+
+\begin{proof}
+Let $G=(A\cup B,E)$ be a bipartite graph on $2n$ with partitions $A=\{a_1,\ldots,a_n\}$ and $B=\{b_1,\ldots,b_n\}$, and each vertex $a_i$ is connected to all $b_j$ with $j>i$, for $i=1,\ldots,n-1$.
+
+This way, if we colour the vertices of $G$ greedly following the sequence $a_1,b_1,a_2,b_2,\ldots,a_{n},b_n$. We clearly need 2 colours to colour $\{a_1,b_1,a_2,b_2\}$, and when colouring any $a_i$, $i>2$, it will receive colour $i$, as it is connected to all $b_j$ with $j<i$, and they were all coloured before with exactly $i-1$ colours. The same argument goes for each $b_i$. So we need $n$ colours to colour $G$, as $a_n,b_n$ both receives colour $n$.
+\end{proof}
+
+\textbf{5.7)} Consider the following approach to vertex colouring. First, find a maximal independent set of vertices and colour these with colour 1; then find a maximal independent set of vertices in the remaining graph and colour those 2, and so on. Compare this algorithm with the greedy algorithm: which is better?
+
+\vspace{.4cm}
+\noindent \textbf{Solution} 
+The given algorithm is equivalent to the greed colouring if we ordered the vertices according to the same criteria. When colouring a vertex in $V_i$, it receives colour $i$ as it is adjacent to at least one vertex in each of the preceding sets $V_1,\ldots,V_{i-1}$, otherwise it could be included in some of them, a contradiction to their maximality.
+
+If the given algorithm yields a non-optimal colouring, we saw in question 5 that there exists some ordering of the vertices such that the greed algorithm yields an optimal colouring.
+
+And last, in question 6 we saw that such algorithm would give an optimal colouring, while some ordering of the vertices for the greed algorithm would yield a worse colouring.
+
+So the greedy algorithm can either perform worse, the same, or better than the given algorithm, based on the chosen sequencing of the vertices.
+
+\vspace{.4cm}
+\textbf{5.8)} Show that the bound of Proposition 5.2.2 is always at least as sharp as that of Proposition 5.2.1.
+
+\vspace{.4cm}
+\noindent \textbf{Solution} 
+
+\begin{proof}
+
+
+We want to show that for any graph $G$ with $m$ edges,
+\begin{equation}
+\max_{H\subseteq G}\{\delta(G)\} \leq \frac{1}{2} + \sqrt{2m+\frac{1}{4}}
+\end{equation}
+
+First, notice that the expression
+\begin{equation}
+\frac{1}{2} + \sqrt{2m+\frac{1}{4}}
+\end{equation}
+denotes the number of vertices on a clique with $m$ edges.
+
+We prove by contradiction, so suppose we have a graph $G$ with
+\begin{equation}
+\max_{H\subseteq G}\{\delta(G)\} > \frac{1}{2} + \sqrt{2m+\frac{1}{4}},
+\end{equation}
+and let $H$ be the maximizing subgraph. So $H$ has more vertices than a clique with $m$ edges, and each of its vertices have more neighbours than those of a clique with $m$ edges, so $H$ has more than $m$, a contradiction.
+
+More formally, given the lower bound on $\delta(H)$, we can lower bound its the number of edges as follows,
+\begin{align*}
+|E(H)| & \geq \frac{1}{2} \delta(H) |H| \\
+& \geq \frac{1}{2} \delta(H) (\delta(H) + 1) \\
+& = \frac{1}{2} (\delta(H)^2 + \delta(H)) \\
+& > \frac{1}{2} \left(\frac{1}{4} + \sqrt{2m+\frac{1}{4}} + 2m+\frac{1}{4} + \frac{1}{2} + \sqrt{2m+\frac{1}{4}}\right) \\
+& = \frac{1}{2} \left(1+2m+2\sqrt{2m+\frac{1}{4}}\right) \\
+& = \frac{1}{2} + 2m +\sqrt{2m+\frac{1}{4}},
+\end{align*}
+thus $H$ has more edges than $G$, a contradiction.
+\end{proof}
+
+
+\noindent \textbf{5.9)} Find a lower bound for the colouring number in terms of average degree.
+
+\vspace{.4cm}
+\noindent \textbf{Solution} 
+
+\begin{proof}
+Let $G$ be a graph and $v_1,\ldots,v_n$ be the sequence of its vertices as suggested in the book, that is, each $v_i$ has minimum degree in $G_i := G[v_1,\ldots,v_n]$. Such sequence can be easily obtained by working backwards, choosing $v_n$ of degree $\delta(G)$, and then $v_{n-1}$ of degree $\delta(G-v_n)$ and so on. We then have
+\begin{align} \label{q59_1}
+\sum_{i=1}^n d_{G_i}(v_i) & = \sum_{i=1}^n \delta (G_i) \leq n (col(G)-1),
+\end{align} 
+as by the definition of $col(G)$, any subgraph $H \subseteq G$ has $col(G) \leq \delta(H) + 1$.
+
+And by summing the degrees of $V(G)$ as above, for each vertex $v_i$ we are only counting the edges $v_iv_j$ with $j<i$. So each edge in $G$ gets counted once and we have,
+\begin{align} \label{q59_2}
+\sum_{i=1}^n d_{G_i}(v_i) & = |E|.
+\end{align}
+\end{proof}
+
+Putting \eqref{q59_1} and \eqref{q59_2} together we get,
+\begin{align*}
+ n (col(G)-1) \geq |E| \rightarrow col(G) \geq \frac{|E|}{n} + 1 = \frac{d(g)}{2} + 1.
+\end{align*}
+
+
+\textbf{5.10)} Find a function $f$ such that every graph of arboricity at least $f(k)$ has colouring number at least $k$, and a function $g$ such that every graph of colouring number at least $g(k)$ has arboricity at least $k$, for all $k \in N$.
+
+\noindent \textbf{Solution (i)} $f(k) = k-1$
+
+\begin{proof}
+Let $G$ be a graph and $v_1,\ldots,v_n$ be some ordering of its vertices. Consider the following algorithm, we initialize a set of edges $F=\empty$ and for each vertex $v_i$, $i=n,\ldots,2$, we take some edge $v_iv_j$ with $j < i$, include it in $F$ and delete it from $G$. We make $F=\emptyset$ again and repeat until no edges are left in $G$. Clearly $F$ was a forest at the end of each iteration.
+
+As $\text{col}(G) = \max_{H\subseteq G}\{\delta(H)\} + 1$, there are at most $\text{col}(G) - 1$ edges $v_iv_j$ with $j<i$ for any vertex $v_i$, thus $\text{col}(G) - 1$ iterations of the algorithm suffices and we have at most $\text{col}(G) - 1$ disjoint forests in $G$, therefore $\text{arb}(G) \leq \text{col}(G) - 1$. So $\text{arb} \geq k-1$ implies $\text{col}(G) \geq k$.
+\end{proof}
+
+\noindent \textbf{Solution (ii)} $g(k)= 2k+1$
+
+\begin{proof}
+Let $col(G) \geq g(k)$, then by the definition of colouring number, $G$ has an induced subgraph $H$ with $\delta(H) + 1 \geq g(k)$. Given the lower bound on the minimum degree, we can also lower bound the number of edges,
+\begin{align*}
+||H|| & \geq \frac{\delta(H) |H|}{2} \geq \frac{(g(k) - 1)|H|}{2}.
+\end{align*}
+
+We then have
+\begin{align*}
+\frac{g(k) - 1}{2} & \leq \frac{||H||}{|H|}
+\leq \frac{||H|||}{|H|+1}
+\leq \text{arb}(G),
+\end{align*}
+the last inequality due to Nash-Willians theorem. So making $g(k) = 2k+1$ satisfies the requisite.
+\end{proof}
+
+\noindent \textbf{5.11)} A $k$-chromatic graph G is called critically $k$-chromatic, or just critical, if $\chi(G-v) < k$ for every vertex $v\in V$.
+Show that every $k$-chromatic graph has a critical $k$-chromatic induced subgraph, and that any such subgraph has minimum degree at least $k-1$.
+
+\vspace{.4cm}
+\noindent \textbf{Solution} 
+
+\begin{lemma} \label{lemma511_1}
+For any vertex of a $k$-chromatic graph $G$, we have either $\chi(G-v) = k$ or $\chi(G-v)=k-1$. 
+\end{lemma}
+\begin{proof}
+Clearly $\chi(G-v) \leq k$, and if $\chi(G-v) \leq k-2$, we could colour $v$ in $G$ with the $k-1$-th colour, contradiction.
+\end{proof}
+
+\begin{lemma} \label{lemma511_2}
+Any critical $k$-chromatic graph $G$ has $\delta(g) = k-1$.
+\end{lemma}
+\begin{proof}
+Suppose some vertex $v$ has at most $k-2$ neighbours. As $G-v$ has a $k-1$ colouring, and $v$ sees at most $k-2$ colours, we can colour $v$ using the $k-1$-th colour, yielding a $k-1$ colouring of $G$, contradiction. 
+\end{proof}
+
+So let $G$ be a $k$-chromatic graph, as it is finite, $\chi(empty)=0$, and using lemma \ref{lemma511_1}, there is a maximal set of vertices $V'$ such that $\chi(G':=G-V') = k$. As $V'$ is maximal by lemma \ref{lemma511_1}, $\chi(G'-v)=k-1$ for all $v\in V\setminus V'$, so $G'$ is $k$-critical, and by lemma \ref{lemma511_2}, has $\delta(G') = k-1$, and is induced by definition.
+
+\textbf{5.12)} Determine the critical 3-chromatic graphs.
+
+\noindent \textbf{Solution} The odd cycles $C$, as $C-v$ has no odd cycle for any $v \in C$, any odd cycle require 3 colours, a graph being 2-chromatic is equivalent to it being bipartite, and a graph is bipartite if and only if it has no odd cycle.
+
+\textbf{5.13)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.14)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.15)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.16)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.17)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.18)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.19)} 
+
+\noindent \textbf{Solution} 
+
+\textbf{5.20)} 
+
+\noindent \textbf{Solution} 
+
+\section{Chapter 6 - Flows}
+
+\textbf{6.1)} 
+
+
+\noindent \textbf{Solution} 
+
+\section{Chapter 7 - Extremal Graph Theory}
+
+\textbf{7.1)} 
+
+
+\noindent \textbf{Solution} 
+
+\section{Chapter 9 - Ramsey Theory for Graphs}
+
+\textbf{9.1)} 
+
+
+\noindent \textbf{Solution} 
+
+\section{Chapter 10 - Hamilton Cycles}
+
+\textbf{10.1)} An oriented complete graph is called a tournament. Show that every tournament contains a (directed) Hamiltonian path.
+
+\noindent \textbf{Solution} 
+
+\begin{proof}
+We prove by induction on $|G|$, for $|G|=2$, the single oriented edge is a directed hamiltonian path by itself. Now let $G$ be a tournament with $n>2$ vertices and assume all tournaments on fewer vertices contains a directed hamiltonian path.
+
+If some vertex $v$ has all the arcs incident to it oriented towards $v$, we can take any directed hamiltonian path of $G-v$, which exists by the induction hypothesis, and extend it to $v$. So assume no such vertex exist, let $v_1$ be some vertex of $G$, and consider the directed hamiltonian path $v_2v_3\ldots v_n$ of $G-v_1$. By our choice of $v_1$, some arc $v_1v_i$, $i\in\{2,\ldots,n\}$, oriented away from $v_1$ exists, so let $k$ be the lowest value for $i$. If $k=2$, we have the directed hamiltonian path $v_1v_2\ldots v_n$ for $G$, if $k=n$, we have the directed hamiltonian path $v_2v_3\ldots v_nv_1$ for $G$, otherwise, we have the directed hamiltonian path $v_2\ldots v_{k-1}v_1v_k\ldots v_n$ for $G$.
+\end{proof}
+
+\textbf{10.2)} Show that every uniquely 3-edge-colourable cubic graph is hamiltonian. ('Unique' means that all 3-edge-colourings induce the same edge partition.)
+
+\vspace{.4cm}
+\noindent \textbf{Solution}
+
+\begin{proof}
+Let $A \cup B$ be the union of the edges in two colours classes, as $G$ is cubic, each vertex has all 3 colours incident to it, so $A \cup B$ is a set of cycles in $G$. If we have a single cycle, it is a hamiltonian cycle and $G$ is hamiltonian. If not, we can flip the colours of one of the cycles, inducing a distinct edge partition, contradiction.
+\end{proof}
+
+
+\textbf{10.4)} Prove or disprove the following strengthening of Proposition 10.1.2: ''Every $k$-connected graph $G$ with $|G| \geq 3$ adn $\chi(G) \geq |G|/k$ has a hamiltonian cycle.
+
+\vspace{.4cm}
+\noindent \textbf{Solution}
+
+\begin{proof}
+The proposition is false, consider the counterexample $K_2$ with 3 indepedent paths of size 2 between its two vertices. By inspection it has no hamiltonian cycle, and
+\begin{align*}
+\frac{|G|}{k} = \frac{5}{2} \leq 3 = \chi(G).
+\end{align*}
+\end{proof}
+
+%9.+ Show that every critical k-chromatic graph is (k−1) - edge-connected.
+%
+%10. Formalize and prove the following statement: assuming large average
+%degree drives the colouring number up but not the chromatic number.
+%11. Write col
+%
+%(G) for the least number of colours used by the greedy algorithm
+%for a suitable vertex ordering of a graph G. Does every G satisfy
+%col
+%
+%(G) = col(G) or col
+%
+%(G) = χ(G)? If so, which graphs satisfy which?
+%
+%12. 
+%
+%13. Given k ∈ N, find a constant ck > 0 such that every large enough
+%graph G with α(G)  k contains a cycle of length at least ck |G|.
+%14.
+%−
+%Find a graph G for which Brooks’s theorem yields a significantly weaker
+%bound on χ(G) than Proposition 5.2.2.
+%15.+ Show that, in order to prove Brooks’s theorem for a graph G = (V,E),
+%we may assume that κ(G)  2 and δ(G)  3. Then prove the theorem
+%under these assumptions, showing first the following two lemmas.
+%(i) Let v1, . . . , vn be an enumeration of V . If every vi (i < n) has
+%a neighbour vj with j > i, and if v1vn, v2vn
+%∈ E but v1v2 /∈ E,
+%then the greedy algorithm uses at most Δ(G) colours.
+%(ii) If G is not complete, it has a vertex vn with non-adjacent neighbours
+%v1, v2 that do not separate G.
+%16.+ Show that the following statements are equivalent for a graph G:
+%(i) χ(G)  k;
+%(ii) G has an orientation without directed paths of length k;
+%(iii) G has an acyclic such orientation (one without directed cycles).
+%17. Given a graph G and k ∈ N, let PG(k) denote the number of vertex
+%colourings V (G)→{1, . . . , k}. Show that PG is a polynomial in k of
+%degree n := |G|, in which the coefficient of kn is 1 and the coefficient
+%of kn−1 is −G. (PG is called the chromatic polynomial of G.)
+%(Hint. Apply induction on G.)
+%18.+ Determine the class of all graphs G for which PG(k) = k (k−1)n−1. (As
+%in the previous exercise, let n := |G|, and let PG denote the chromatic
+%polynomial of G.)
+%
+%
+%19. Show that for every k ∈ N there is a unique ⊆-minimal ‘Kuratowski
+%class’ Xk of k-chromatic graphs such that every k-chromatic graph has
+%a subgraph in Xk, but that for k  3 this class Xk is never finite.
+%20. In the definition of ‘k-constructible’, replace axioms (ii) and (iii) by
+%(ii)
+%
+%Every supergraph of a k-constructible graph is k-constructible.
+%(iii)
+%
+%If x, y1, y2 are distinct vertices of a graph G and y1y2
+%∈ E(G),
+%and if both G+xy1 and G+xy2 are k-constructible, then G is
+%k-constructible.
+%Show that a graph is k-constructible with respect to this new definition
+%if and only if its chromatic number is at least k.
+%21.
+%−
+%An n×n - matrix with entries from {1, . . . , n} is called a Latin square
+%if every element of {1, . . . , n} appears exactly once in each column and
+%exactly once in each row. Recast the problem of constructing Latin
+%squares as a colouring problem.
+%22. Without using Proposition 5.3.1, show that χ
+%
+%(G) = k for every kregular
+%bipartite graph G.
+%23. Prove Proposition 5.3.1 from the statement of the previous exercise.
+%24.+ For every k ∈ N, construct a triangle-free k-chromatic graph.
+%25.
+%−
+%Let G be a graph, and let k ∈ N.
+%(i) Show that G has chromatic number at most k if and only if there
+%exists a homomorphism from G to Kk.
+%(ii) Show that G is bipartite if and only if there exists a homomorphism
+%from G to K2 or to an even cycle.
+%(iii) Are there homomorphisms from C17 to C7, from C7 to C17,
+%from C16 to C7, and from C17 to C6?
+%26. Show that graphs of large girth and without a given minor are ‘nearly
+%bipartite’ in the following sense. Let H be a fixed graph and C a fixed
+%odd cycle. Use Theorem 7.2.6 to show that if G is a graph of sufficiently
+%large girth (depending only on H and C) that does not contain H as a
+%minor, then there is a homomorphism from G to C.
+%27.
+%−
+%Without using Theorem 5.4.2, show that every plane graph is 6-listcolourable.
+%28. For every integer k, find a 2-chromatic graph whose choice number is
+%at least k.
+%29.
+%−
+%Find a general upper bound for ch
+%
+%(G) in terms of χ
+%
+%(G).
+%30. Compare the choice number of a graph with its colouring number:
+%which is greater? Can you prove the analogue of Theorem 5.4.1 for
+%the colouring number?
+%31.+ Prove that the choice number of Kr
+%2 is r.
+%
+%
+%
+%
+%32. The total chromatic number χ
+%
+%(G) of a graph G = (V,E) is the least
+%number of colours needed to colour the vertices and edges of G simultaneously
+%so that any adjacent or incident elements of V ∪E are coloured
+%differently. The total colouring conjecture says that χ
+%
+%(G)  Δ(G)+2.
+%Bound the total chromatic number from above in terms of the listchromatic
+%index, and use this bound to deduce a weakening of the
+%total colouring conjecture from the list colouring conjecture.
+%33.
+%−
+%Does every oriented graph have a kernel? If not, does every graph have
+%an orientation in which every induced subgraph has a kernel? If not,
+%does every graph have an orientation that has a kernel?
+%34.+ Prove that every directed graph without odd directed cycles has a kernel.
+%35. Show that every bipartite planar graph is 3-list-colourable.
+%(Hint. Apply the previous exercise and Lemma 5.4.3.)
+%36.
+%−
+%Show that perfection is closed neither under edge deletion nor under
+%edge contraction.
+%37.
+%−
+%Deduce Theorem 5.5.6 from the strong perfect graph theorem.
+%38. Let H1 and H2 be two sets of imperfect graphs, each minimal with
+%the property that a graph is perfect if and only if it has no induced
+%subgraph in Hi (i = 1, 2). Do H1 and H2 contain the same graphs, up
+%to isomorphism?
+%39. Use K¨onig’s Theorem 2.1.1 to show that the complement of any bipartite
+%graph is perfect.
+%40. Using the results of this chapter, find a one-line proof of the following
+%theorem of K¨onig, the dual of Theorem 2.1.1: in any bipartite graph
+%without isolated vertices, the minimum number of edges meeting all
+%vertices equals the maximum number of independent vertices.
+%41. A graph is called a comparability graph if there exists a partial ordering
+%of its vertex set such that two vertices are adjacent if and only if they
+%are comparable. Show that every comparability graph is perfect.
+%42. A graph G is called an interval graph if there exists a set { Iv | v ∈ V (G) }
+%of real intervals such that Iu ∩Iv = ∅ if and only if uv ∈ E(G).
+%(i) Show that every interval graph is chordal.
+%(ii) Show that the complement of any interval graph is a comparability
+%graph.
+%(Conversely, a chordal graph is an interval graph if its complement is a
+%comparability graph; this is a theorem of Gilmore and Hoffman (1964).)
+%43. Show that χ(H) ∈ {ω(H), ω(H)+1} for every line graph H.
+%44.+ Characterize the graphs whose line graphs are perfect.
+%45. Show that a graph G is perfect if and only if every non-empty induced
+%subgraph H of G contains an independent set A ⊆ V (H) such that
+%ω(H −A) < ω(H).
+%
+%46. Would the proof of Theorem 5.5.4 still go through if we let K consist of
+%only the maximal sets of vertices spanning complete subgraphs in G?
+%Or only of those that span a Kω?
+%47.+ Consider the graphs G for which every induced subgraph H has the
+%property that every maximal complete subgraph of H meets every maximal
+%independent vertex set in H.
+%(i) Show that these graphs G are perfect.
+%(ii) Show that these graphs G are precisely the graphs not containing
+%an induced copy of P3.
+%48.+ Show that in every perfect graph G one can find a set A of independent
+%vertex sets and a set O of vertex sets of complete subgraphs such that
+%A = V (G) =
+%
+%O and every set in A meets every set in O.
+%(Hint. Lemma 5.5.5.)
+%49.+ Let G be a perfect graph. As in the proof of Theorem 5.5.4, replace
+%every vertex x of G with a perfect graph Gx (not necessarily complete).
+%Show that the resulting graph G is again perfect.
+
+
+\end{document}
