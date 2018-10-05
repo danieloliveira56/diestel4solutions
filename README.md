@@ -7,7 +7,9 @@ Let me know if you spot any mistake in the solutions.
 Below, I list all the exercises that I have writen a solution for.
 ## Chapter 1
 
-11|12
+|||||||||
+|--|--|--|--|--|--|--|--|
+|23|37|38||||||
 
 ## Chapter 2
 
