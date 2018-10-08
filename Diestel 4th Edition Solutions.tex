@@ -53,7 +53,7 @@
 \author{Daniel Oliveira}
 \maketitle
 
-\section{Frequently used relations and techniques}
+\section*{Frequently used relations and techniques}
 
 \begin{itemize}
 
@@ -81,7 +81,7 @@
 
 \end{itemize}
 
-\section{Chapter 1 - The basics}
+\section*{Chapter 1 - The basics}
 
 \textbf{1.23)} Let $\mathcal{F}$ be a set of subtrees of a tree $T$, and $k \in \mathbb{N}$.
 
@@ -163,6 +163,75 @@ If some $u$ in $N_{\bar{F}}(v)$ has with $d_F(u)$ odd, we can include $uv$ in $F
 \newpage
 \section*{Chapter 2 - Matching, Covering and Packing}
 
+\textbf{2.1) Let $M$ be a matching in a bipartite graph $G$. Show that if $M$ is suboptimal, then $G$ contains an augmenting path with respect to $M$. Does this fact generalize to matching in non-bipartite graphs?}
+
+\begin{proof}
+Yes, the fact apply to general graphs, and we present a general proof.
+
+Let $G$ be a graph, $M,N$ be respectively a suboptimal and an optimal matching in $G$. 
+
+Now consider the graph $H=(V(G),M\delta N)$.
+As at most one edge in $M$ and one in $N$ are incident to any vertex of $G$, $H$ consists of a series of paths and even cycles, with edges alternating between edges in $M$ and $N$. As $|N|>|M|$ and even cycles all have the same number of edges in $M$ and in $N$, there is a path $P$ in $H$ with one extra edge in $N$, so $P$ is an alternating path starting and ending at a $M$-exposed vertex, thus $P$ is an augmenting path.
+\end{proof}
+
+\textbf{2.2) Describe an algorithm that finds, as efficiently as possible, a matching of maximum cardinality in any bipartite graph.}
+
+By question 1, we have an optimal matching if no augmenting path exists in $G$.
+As given a matching $M$ and an augmenting path $P$, we have a larger matching $M'=M \delta E(P)$. So we can start with $M=\empty$ and search for augmenting paths until they no longer exist, increasing the size of $M$ with each augmenting path found.
+And by showing no more augmenting paths exist, we know $M$ is maximum.
+
+A simple algorithm would be to, using a BFS, enumerate all paths starting at an $M$-exposed vertex in $A$, in order to find a path also ending at an $M$-exposed vertex in $A$. 
+
+\textbf{2.5) Derive the marriage theorem from Konig's theorem.}
+
+This was a theorem in past editions of the book, and can be found also in Schrijver Combinatorial Optimization book.
+
+\begin{proof}
+We prove the non-trivial implication.
+
+Let $G$ be a bipartite graph with partitions $\{A,B\}$ and no matching of $A$. We need to show some vertex set $S$ with $|S|>|N(S)|$ exists. 
+
+Let $M$ be a maximum matching $G$, let $U$ be a minimum vertex cover of $G$, by Konig's, $|M| = |U|$, and let $A' = A \cap U$, $B' = B \cap U$. As $U$ cover $E$, no edges exist between $A\setminus A'$ and $B\setminus B'$, so $|N(A \setminus A') \subseteq B'$. We then have,
+\begin{align*}
+|A\setminus A'| & = |A| - |A'| \\
+& = |A| - (|U| - |B'|) \\
+& = |A| - |M| + |B'| \\
+& \leq |A| - |M| + |N(A \setminus A')| \\
+& < |N(A \setminus A')|
+\end{align*}
+\end{proof}
+
+\textbf{2.6)} Let $G$ and $H$ be defined asd for the third proof of Hall's theorem. Show that $D_H(b) \leq 1$ for every $b \in B$, and deduce the marriage theorem.
+
+\begin{proof}
+Let $H$ be an edge-minimal subgraph of $G$ that satisfies the marriage condition and contains $A$.
+
+Suppose for a contradiction that some vertex $b \in B$ with $d(b) \geq 2$ exists. We find a vertex set violating the marriage condition in $H$.
+
+Let $a_1,a_2 \in A$ be two vertices adjacent to $b$. By the minimality of $H$, $H-a_1b$ and $H-a_2b$ respectively have sets $A_1$ and $A_2$ violating the marriage condition. Note this implies $|A_1| = |N_H(A_1)|$, and $|A_2| = |N_H(A_2)|$.
+
+As $|N_{H-a_1b}(A_1)| < |N_{H}(A_1)|$, $a_1$ is the only vertex in $A_1$ adjacent to $b$. Analogously, the same is true for $a_2$ in $A_2$. So $b \not \in N_H(A_1 \cap A_2)$, also $b \in N_H(A_1) \cap N_H(A_2) $, therefore $|N_H(A_1 \cap A_2)| < | N_H(A_1) \cap N_H(A_2)|$.
+
+We then have,
+\begin{align*}
+|N_H(A_1 \cup A_2)| &= |N_H(A_1) \cup N_H(A_2)| \\
+& = |N_H(A_1)| + |N_H(A_2)| - |N_H(A_1) \cap N_H(A_2)| \\
+& = |A_1| + |A_2| - |N_H(A_1) \cap N_H(A_2)| \\
+& = |A_1 \cup A_2| + |A_1 \cap A_2| - |N_H(A_1) \cap N_H(A_2)| \\
+& \leq |A_1 \cup A_2| + |N_H(A_1 \cap A_2)| - |N_H(A_1) \cap N_H(A_2)| \\
+& < |A_1 \cup A_2| + | N_H(A_1) \cap N_H(A_2)| - |N_H(A_1) \cap N_H(A_2)| \\
+& = |A_1 \cup A_2|,
+\end{align*}
+a contradiction.
+
+So $d_H(b) \leq 1$, that is, no two vertices in $A$ share a neighbor in $B$. So as $H$ have the marriage condition satisfied for all $S \subseteq A$, , every vertex in $A$ has a neighbour in $B$, so $E(H)$ is a matching of $A$.
+
+\end{proof}
+
+
+
+\textbf{2.8)}
+
 \textbf{2.11\textsuperscript{+})} Let $G$ be a bipartite graph with bipartition $\{A,B\}$. Assume that $\delta(G) \geq 1$, and that $d(a) \geq d(b)$ for every edge $ab$ with $a \in A$. Show that $G$ contains a matching of $A$.
 
 \begin{proof}
@@ -185,7 +254,7 @@ a contradiction.
 
 
 
-\section{Chapter 4 - Planarity}
+\section*{Chapter 4 - Planarity}
 
 \textbf{4.22)} A graph is called outerplanar if it has a drawing in which every vertex lies on the boundary of the outer face. Show that a graph is outerplanar if and only if it contains neither $K^4$ nor $K_{2,3}$ as a minor.
 
@@ -198,7 +267,7 @@ Now for the converse, let $G$ be graph with no $K_4$ nor $K_{2,3}$ as a minor. B
 \end{proof}
 
 
-\section{Chapter 5 - Colouring}
+\section*{Chapter 5 - Colouring}
 
 \textbf{5.1)} Show that the four colour theorem does indeed solve the map colouring problema stated in the first sentence of the chapter. Conversely, does the 4-colourability of every map imply the four colour theorem?
 
@@ -409,28 +478,28 @@ So let $G$ be a $k$-chromatic graph, as it is finite, $\chi(empty)=0$, and using
 
 \noindent \textbf{Solution} 
 
-\section{Chapter 6 - Flows}
+\section*{Chapter 6 - Flows}
 
 \textbf{6.1)} 
 
 
 \noindent \textbf{Solution} 
 
-\section{Chapter 7 - Extremal Graph Theory}
+\section*{Chapter 7 - Extremal Graph Theory}
 
 \textbf{7.1)} 
 
 
 \noindent \textbf{Solution} 
 
-\section{Chapter 9 - Ramsey Theory for Graphs}
+\section*{Chapter 9 - Ramsey Theory for Graphs}
 
 \textbf{9.1)} 
 
 
 \noindent \textbf{Solution} 
 
-\section{Chapter 10 - Hamilton Cycles}
+\section*{Chapter 10 - Hamilton Cycles}
 
 \textbf{10.1)} An oriented complete graph is called a tournament. Show that every tournament contains a (directed) Hamiltonian path.
 
