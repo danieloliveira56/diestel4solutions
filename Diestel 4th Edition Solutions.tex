@@ -201,7 +201,7 @@ Let $M$ be a maximum matching $G$, let $U$ be a minimum vertex cover of $G$, by 
 \end{align*}
 \end{proof}
 
-\textbf{2.6)} Let $G$ and $H$ be defined asd for the third proof of Hall's theorem. Show that $D_H(b) \leq 1$ for every $b \in B$, and deduce the marriage theorem.
+\textbf{2.6)} Let $G$ and $H$ be defined as for the third proof of Hall's theorem. Show that $D_H(b) \leq 1$ for every $b \in B$, and deduce the marriage theorem.
 
 \begin{proof}
 Let $H$ be an edge-minimal subgraph of $G$ that satisfies the marriage condition and contains $A$.
@@ -225,34 +225,83 @@ We then have,
 a contradiction.
 
 So $d_H(b) \leq 1$, that is, no two vertices in $A$ share a neighbor in $B$. So as $H$ have the marriage condition satisfied for all $S \subseteq A$, , every vertex in $A$ has a neighbour in $B$, so $E(H)$ is a matching of $A$.
-
 \end{proof}
 
 
+\textbf{2.8)} Let $k$ be an integer. Show that any two partitions of a finite set into $k-sets$ admit a common choice of representatives.
 
-\textbf{2.8)}
+\begin{proof}
+Let $S$ be a finite set, $k$ be an integer, and $\mathcal{P}_1$, $\mathcal{P}_2$ be two partitions of $S$ into $k$-sets. We create a bipartite graph with partitions $\{A,B\}$ as follows. For each element of $\mathcal{P}_1$, create a vertex in $A$, and for each element of $\mathcal{P}_2$, create a vertex in $B$. And we create $A$-$B$ edges in $G$ such that, for each pair of partitions $P_1 \in \mathcal{P}_1,P_2 \in \mathcal{P}_2$, there is an edge between its corresponding vertices in $G$ iff $P_1$ and $P_2$ have an element in common. 
+
+As we partition $S$ into $k$-sets, $|\mathcal{P}_1| = |\mathcal{P}_2$, and $|A| = |B|$. We then need to prove all subsets of $A$ satisfy the marriage condition.
+
+Let $S \subseteq A$. By the construction of $G$, the sets in $\mathcal{P}_1$ corresponding to the vertices in $S$ have $k|S|$ vertices in total, and therefore, as $\mathcal{P}_2$ is also a partition into $k$-sets, should be linked to at least $|S|$ elements in $B$, so $|N(S)| \geq |S|$.
+\end{proof}
+
+
+\textbf{2.9)} Let $A$ be a finite set with subsets $A_1,\ldots,A_n$, and let $d_1,\ldots,d_n \in \mathbb{N}$. Show that there are disjoint subsets $D_k \subseteq A_k$, with $|D_k|=d_k$, for all $k \leq n$ if and only if 
+\begin{align*}
+\left|\,\bigcup \limits_{i \in I} A_i\,\right| \geq \sum \limits_{i \in I} d_i
+\end{align*}
+for all $I \subseteq \{1,\ldots,n\}$.
+
+\begin{proof}
+We construct a bipartite graph $G$ with partitions $\{B,C\}$ as follows. We make $C:=A$ ,and for each $d_i \in \{d_1,\ldots,d_n\}$, we include a set $B_i\{b_{i1},\ldots,b_{id_i}\}$ of $d_i$ vertices in $B$, each connected to all vertices in $C$ corresponding to a vertex of $A_i$.
+
+So a matching of $B$ corresponds to disjoint subsets $D_k \subseteq A_k$, with $|D_k|=d_k$, for all $k \leq n$. Just take $D_k$ as the set of vertices in $C$ connected to all $b_{ik}$ in $B$.
+
+Since $N(S) = N(C_i)$ for all $S\subseteq C_i$, having the marriage condition satisfied for $C_i$ implies it is satisfied for all of its subsets. This way, the marriage condition in $G$ is equivalent to
+\begin{align*}
+\left|\,\bigcup \limits_{i \in I} A_i\,\right| \geq \sum \limits_{i \in I} d_i
+\end{align*}
+for all $I \subseteq \{1,\ldots,n\}$, and the result follows from Hall's Theorem.
+\end{proof}
+
+
 
 \textbf{2.11\textsuperscript{+})} Let $G$ be a bipartite graph with bipartition $\{A,B\}$. Assume that $\delta(G) \geq 1$, and that $d(a) \geq d(b)$ for every edge $ab$ with $a \in A$. Show that $G$ contains a matching of $A$.
 
 \begin{proof}
-Suppose there is no matching of $A$, and let $M$ be a maximum matching, $A' \subseteq A$, $B' \subset B$ be the sets of $M$-covered vertices. Clearly $|A'| = |B'|$, and $E(A \setminus A',B \setminus B') = \emptyset$, otherwise $M$ is not maximal.
+Suppose there is no matching of $A$, let $M$ be a maximum matching, and let $A' \subseteq A$, $B' \subseteq B$ be the sets of $M$-covered vertices. We show an augmenting path exists in $G$.
 
-So by counting the edges incident to $B'$,
-\begin{align*}
-\sum \limits_{v \in B'} d(v) & = \sum \limits_{v \in A'} d(v) + \sum \limits_{v \in A\setminus A'} d(v) \\
-& \geq \sum \limits_{v \in A'}d(v)  + |A' \setminus A| \qquad (\text{as } \delta(G) \geq 1)\\
-& > \sum \limits_{v \in A'} d(v)  \qquad (\text{as } A' \setminus A \neq \emptyset) 
-\end{align*}
+Let $u \in A\setminus A'$, as $E(A \setminus A',B \setminus B') = \emptyset$, otherwise $M$ is not maximal, and $\delta(G) \geq 1$, $u$ is connected to a vertex $v \in B'$. So consider all trails $\mathcal{W}$ starting with $uv$, let $V_{\mathcal{W}}$ be the set of vertices reached by any trail in $\mathcal{W}$, and let $A'' := A'\cap V_{\mathcal{W}}$, $B'':=B' \cap V_{\mathcal{W}}$. Note that any trail reaching a vertex $b\in B'$, can also reach a vertex $a \in A'$ along $ab \in M$, as all trails in $\mathcal{W}$ start with $uv$, $|A''| = |B''|$, by the same reason, and the property on the degrees of $G$, we have $d(A'') \geq d(B'')$. 
 
-And by the given property, each edge $ab \in M$ has $d(a) \geq d(b)$, as $M$ is a matching, 
-\begin{align*}
-\sum \limits_{v \in A'} d(v) \geq \sum \limits_{v \in B'} d(v) ,
-\end{align*}
-a contradiction.
+If all trails in $\mathcal{W}$ end at a vertex $v \in A' \cup B'$ without reaching $B\setminus B'$, as at least one $A\setminus A'-B'$ edge exists (namely $uv$), we would have $d(A'') < d(B'')$, a contradiction. So there exists a trail in $\mathcal{W}$ ending at $B\setminus B'$. As any trail contains a path between its ends, we have an augmenting path.
+
+%Now consider the subgraph $H := (V,M)$, we have $d_H(v) = 1$ for each $v \in A'\cup B'$. 
+%Then each extra $A'-B'$ edge simultaneously increase the degree of a vertex in $A'$ and one in $B'$, but an extra $(A\setminus A')-B'$ edge increase the degree of an edge in $B'$ but not in $A'$, thus
+%\begin{align*}
+%|E(A',B \setminusB')| > d(A\setminus A').
+%\end{align*}
+%
+%
+%So by counting the edges incident to $B'$,
+%
+%\begin{align*}
+%\sum \limits_{v \in B'} d(v) & = \sum \limits_{v \in A'} d(v) + \sum \limits_{v \in A\setminus A'} d(v) \\
+%& \geq \sum \limits_{v \in A'}d(v)  + |A' \setminus A| \qquad (\text{as } \delta(G) \geq 1)\\
+%& > \sum \limits_{v \in A'} d(v)  \qquad (\text{as } A' \setminus A \neq \emptyset) 
+%\end{align*}
+%
+%And by the given property, each edge $ab \in M$ has $d(a) \geq d(b)$, as $M$ is a matching, 
+%\begin{align*}
+%\sum \limits_{v \in A'} d(v) \geq \sum \limits_{v \in B'} d(v) ,
+%\end{align*}
+%a contradiction.
 
 \end{proof}
 
+\textbf{2.12\textsuperscript{$-$})} Find a bipartite graph with a set of preferences such that no matching of maximum size is stable and no stable matching has maximum size. Find a non-bipartite graph with a set of preferences that has no stable matching.
 
+\begin{proof}
+For the bipartite graph, let $G=\{V,E\}$, with $V=\{a_1,a_2,b_1,b_2\}$ and $E = \{a_1b_1,a_1b_2,a_2b_2\}$, and a set of preferences $a_1b_1 \leq_{a_1} a_1b_2$ and $a_2b_2 \leq_{b_2} a_1b_2$. So the maximum size matching $M=\{a_1b_1,a_2b_2\}$ is not stable, since $a_1b_2$ is preferred both by $a_1$ and $b_2$. And the stable matching $M=\{a_1b_2\}$ is not maximum.
+
+Now for the non-bipartite graph, let $H=\{V,E\}$, with $V=\{a,b,c\}$ and $E = \{ab,ac,bc\}$, and a set of preferences $ac \leq_{a} ab$, $ab \leq_{b} bc$, and $ab \leq_{c} ac$. So $H$ has no stable matching, since the 3 possible matchings $\{ab\},\{bc\}$, and $\{ac\}$ respectively have $b$ preferring $bc$, $c$ preferring $ac$, and $a$ preferring $ab$.
+\end{proof}
+
+\section*{Chapter 3 - Connectivity}
+
+\textbf{3.1)}
 
 \section*{Chapter 4 - Planarity}
 

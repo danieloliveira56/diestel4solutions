@@ -11,7 +11,7 @@ Below, I list all the exercises that I have writen a solution for.
 
 ## Chapter 2 - Matchings
 
-1, 2, 5, 6, 11
+1, 2, 5, 6, 8, 9, 11, 12
 
 ## Chapter 4 - Planarity
 
