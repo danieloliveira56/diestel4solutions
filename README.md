@@ -1,6 +1,6 @@
 # Diestel's Graph Theory 4th Edition Solutions
 
-This is not intended to have all solutions, only for the exercises that interest me.
+This is not intended to have all solutions.
 
 Let me know if you spot any mistake in the solutions.
 
